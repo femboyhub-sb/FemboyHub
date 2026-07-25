@@ -422,4 +422,53 @@ for i, loc in ipairs(locations) do
 Name = <string> - The name of the button.
 Callback = <function> - Function executed when the button is pressed.
 ]]
+
+Tab1:AddButton({
+    Name = "Instnat firework. Player 1 (helper)",
+    Callback = function()
+        print("button pressed")
+game:GetService("ReplicatedStorage"):WaitForChild("GeneralAbility"):FireServer()
+task.wait(0.2)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab1:AddButton({
+    Name = "Instant Firework. Player 2 (main acc)",
+    Callback = function()
+        print("button pressed")
+local player = game.Players.LocalPlayer
+local hrp = player.Character:WaitForChild("HumanoidRootPart")
+
+hrp.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
+task.wait(0.3)
+
+game:GetService("ReplicatedStorage").Firework:InvokeServer()
+game:GetService("ReplicatedStorage").AlchemistEvent:FireServer("AddItem", "Cake Mix")
+task.wait(0.1)
+game:GetService("ReplicatedStorage").AlchemistEvent:FireServer("EquipItem", "Cake Mix")
+task.wait(0.5)
+
+local ovenModel = workspace:FindFirstChild("Cube", true)
+if ovenModel then
+    if ovenModel:IsA("Model") and ovenModel.PrimaryPart then
+        hrp.CFrame = ovenModel.PrimaryPart.CFrame * CFrame.new(0, 0, -3)
+    elseif ovenModel:IsA("BasePart") then
+        hrp.CFrame = ovenModel.CFrame * CFrame.new(0, 3, 0)
+    end
+else
+    hrp.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
+            end
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
 OrionLib:Init()
