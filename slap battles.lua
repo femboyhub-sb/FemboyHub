@@ -530,7 +530,8 @@ rs.Stepped:Connect(function()
         end
     end
 end)
-        end
+end
+})
 --[[
 Name = <string> - The name of the button.
 Callback = <function> - Function executed when the button is pressed.
