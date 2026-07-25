@@ -503,4 +503,43 @@ end)
 Name = <string> - The name of the button.
 Callback = <function> - Function executed when the button is pressed.
 ]]
+
+Tab1:AddButton({
+    Name = "Auto get plate (with auto executed noclip)",
+    Callback = function()
+        print("button pressed")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local lp = Players.LocalPlayer
+local character = lp.Character or lp.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+local noclipConnection
+noclipConnection = RunService.Stepped:Connect(function()
+    if character and character:Parent() then
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") and part.CanCollide then
+                part.CanCollide = false
+            end
+        end
+    else
+        noclipConnection:Disconnect()
+    end
+end)
+
+lp.CharacterAdded:Connect(function(newChar)
+    character = newChar
+end)
+
+task.wait(0.1)
+hrp.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
+            
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
 OrionLib:Init()
