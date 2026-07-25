@@ -509,31 +509,33 @@ Tab1:AddButton({
     Name = "Auto get plate (with auto executed noclip)",
     Callback = function()
         print("button pressed")
-local lp = game:GetService("Players").LocalPlayer
-local rs = game:GetService("RunService")
+        local lp = game:GetService("Players").LocalPlayer
+        local rs = game:GetService("RunService")
 
-local function target(v)
-    if v:IsA("BasePart") and v.Color == Color3.fromRGB(255, 0, 0) then
-        v:Destroy()
-    end
-end
-
-for _, v in workspace:GetDescendants() do target(v) end
-workspace.DescendantAdded:Connect(target)
-
-rs.Stepped:Connect(function()
-    local char = lp.Character
-    if not char then return end
-    for _, v in char:GetDescendants() do
-        if v:IsA("BasePart") then
-            v.CanCollide = false
+        local function target(v)
+            if v:IsA("BasePart") and v.Color == Color3.fromRGB(255, 0, 0) then
+                v:Destroy()
+            end
         end
-    end
-end)
-end
-})
+
+        for _, v in workspace:GetDescendants() do target(v) end
+        workspace.DescendantAdded:Connect(target)
+
+        rs.Stepped:Connect(function()
+            local char = lp.Character
+            if not char then return end
+            for _, v in char:GetDescendants() do
+                if v:IsA("BasePart") then
+                    v.CanCollide = false
+                end
+            end
+        end)
+    end -- closes functionCallback
+}) -- closes call add button
+
 --[[
 Name = <string> - The name of the button.
 Callback = <function> - Function executed when the button is pressed.
 ]]
 OrionLib:Init()
+    
