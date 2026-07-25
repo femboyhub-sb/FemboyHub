@@ -472,4 +472,35 @@ Name = <string> - The name of the button.
 Callback = <function> - Function executed when the button is pressed.
 ]]
 
+Tab5:AddButton({
+    Name = "Noclip",
+    Callback = function()
+        print("button pressed")
+local player = game.Players.LocalPlayer
+local runService = game:GetService("RunService")
+local character = player.Character or player.CharacterAdded:Wait()
+
+local noclipConnection
+noclipConnection = runService.Stepped:Connect(function()
+    if character and character:Parent() then
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") and part.CanCollide then
+                part.CanCollide = false
+            end
+        end
+    else
+        noclipConnection:Disconnect()
+    end
+end)
+
+player.CharacterAdded:Connect(function(newChar)
+    character = newChar
+end)
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
 OrionLib:Init()
