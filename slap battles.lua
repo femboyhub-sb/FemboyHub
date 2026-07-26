@@ -170,6 +170,7 @@ Tab4:AddParagraph("Creators", "silentabsolutedayn")
 Tab4:AddParagraph("2nd creator", "nerna coder-zemboxosx")
 Tab4:AddParagraph("3rd creator", "deltarune_tomorrow")
 Tab4:AddParagraph("Thanks to..", "Nexer open sourced scripts and kindness!")
+Tab4:AddParagraph("Thanks to..", "Scripter for shellbert fix, huge appreciation!")
 
 -- ================= Funny =================
 local Tab5 = Window:MakeTab({
