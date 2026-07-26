@@ -1,261 +1,249 @@
 -- open source
-if game.PlaceId ~= 6403373529 then -- ИСПРАВЛЕНО: добавлен 'then'
-    local OrionLib = loadstring(game:HttpGet(("https://raw.githubusercontent.com/Pro666Pro/DraggableOrionLib/main/main.lua")))()
-    local Window = OrionLib:MakeWindow({
-        Name = "Femboy Hub",
-        HidePremium = false,
-        SaveConfig = true,
-        ConfigFolder = "OrionTest"
-    })
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Pro666Pro/DraggableOrionLib/main/main.lua"))()
+local Window = OrionLib:MakeWindow({
+    Name = "Femboy Hub",
+    HidePremium = false,
+    SaveConfig = true,
+    ConfigFolder = "OrionTest"
+})
 
-    -- notifications
-    OrionLib:MakeNotification({
-        Name = "Scripts here are useful!",
-        Content = "Notification content...",
-        Image = "rbxassetid://4483345998",
-        Time = 5
-    })
+-- notifications
+OrionLib:MakeNotification({
+    Name = "Scripts here are useful!",
+    Content = "Notification content...",
+    Image = "rbxassetid://4483345998",
+    Time = 5
+})
 
-    -- auto bob services
-    local TeleportService = game:GetService("TeleportService")
-    local HttpService = game:GetService("HttpService")
-    local Players = game:GetService("Players")
-    local lp = Players.LocalPlayer
-    local placeId = game.PlaceId
-    local currentJob = game.JobId
-    local req = (syn and syn.request) or (http and http.request) or http_request or request
+-- auto bob services
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+local placeId = game.PlaceId
+local currentJob = game.JobId
+local req = (syn and syn.request) or (http and http.request) or http_request or request
 
-    -- auto bob server hop
-    local function hop()
-        if not req then 
-            return TeleportService:Teleport(placeId, lp) 
-        end
-        local url = "https://roblox.com" .. placeId .. "/servers/0?sortOrder=Desc&limit=100"
-        local res = req({Url = url, Method = "GET"})
-        if res and res.Body then
-            local data = HttpService:JSONDecode(res.Body)
-            if data and data.data then
-                for _, server in pairs(data.data) do
-                    if server.id ~= currentJob and server.playing < server.maxPlayers then
-                        local success = pcall(function()
-                            TeleportService:TeleportToPlaceInstance(placeId, server.id, lp)
-                        end)
-                        if success then return end
-                    end
-                end
-            end
-        end
-        TeleportService:Teleport(placeId, lp)
+-- auto bob server hop
+local function hop()
+    if not req then 
+        return TeleportService:Teleport(placeId, lp) 
     end
-
-    -- ================= Slap Battles Badges =================
-    local Tab1 = Window:MakeTab({
-        Name = "Slap Battles Badges",
-        Icon = "rbxassetid://4483345998",
-        PremiumOnly = false
-    })
-
-    Tab1:AddButton({
-        Name = "Auto Recall",
-        Callback = function()
-            print("button pressed")
-            local rsanswrr -- ИСПРАВЛЕНО: переменная объявлена как local, чтобы избежать ошибок
-            repeat 
-                task.wait() 
-                game:GetService("ReplicatedStorage").RecallReset:FireServer(nil, true) 
-                rsanswrr = game:GetService("ReplicatedStorage").RecallLastInteractionSteps:InvokeServer(false) 
-            until rsanswrr == "Simon says walk through the portal to collect your reward"
-            
-            task.wait(2) 
-            game.Players.LocalPlayer.Character.HumanoidRootPart:PivotTo(workspace.RepressedMemories.Portal.CFrame)
+    local url = "https://roblox.com" .. placeId .. "/servers/Public?sortOrder=Desc&limit=100"
+    local res = req({Url = url, Method = "GET"})
+    if res and res.Body then
+        local data = HttpService:JSONDecode(res.Body)
+        if data and data.data then
+            for _, server in pairs(data.data) do
+                if server.id ~= currentJob and server.playing < server.maxPlayers then
+                    local success = pcall(function()
+                        TeleportService:TeleportToPlaceInstance(placeId, server.id, lp)
+                    end)
+                    if success then return end
+                end
+            end
         end
-    })
+    end
+    TeleportService:Teleport(placeId, lp)
+end
 
-    Tab1:AddButton({
-        Name = "Poltergeist (ONLY HALLOWEEN)",
-        Callback = function()
-            print("button pressed")
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/nerna-coder/Poltergeist/refs/heads/main/Slap%20battles.lua"))()
-        end    
-    })
+-- ================= Slap Battles Badges =================
+local Tab1 = Window:MakeTab({
+    Name = "Slap Battles Badges",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
 
-    Tab1:AddButton({
-        Name = "Instant ice skate",
-        Callback = function()
-            print("button pressed")
-            game:GetService("ReplicatedStorage").IceSkate:FireServer("Freeze")
-        end    
-    })
+Tab1:AddButton({
+    Name = "Auto Recall",
+    Callback = function()
+        print("button pressed")
+        local rsanswrr
+        repeat 
+            task.wait() 
+            game:GetService("ReplicatedStorage").RecallReset:FireServer(nil, true) 
+            rsanswrr = game:GetService("ReplicatedStorage").RecallLastInteractionSteps:InvokeServer(false) 
+        until rsanswrr == "Simon says walk through the portal to collect your reward"
+        task.wait(2) 
+        game.Players.LocalPlayer.Character.HumanoidRootPart:PivotTo(workspace.RepressedMemories.Portal.CFrame)
+    end
+})
 
-    Tab1:AddButton({
-        Name = "Instant lamp",
-        Callback = function()
-            print("button pressed")
-            local Event = game:GetService("ReplicatedStorage").nightmare
-            local equip = debug.getupvalues(require(game.ReplicatedStorage.BACKEND.Lib.Network).fireServer)[3]("SelectGlove")
-            equip:FireServer("ZZZZZZZ")
-            task.wait(0.5)
-            for i = 35, 120 do
-                Event:FireServer("LightBroken")
-                task.wait(0.05)
+Tab1:AddButton({
+    Name = "Poltergeist (ONLY HALLOWEEN)",
+    Callback = function()
+        print("button pressed")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/nerna-coder/Poltergeist/refs/heads/main/Slap%20battles.lua"))()
+    end    
+})
+
+Tab1:AddButton({
+    Name = "Instant ice skate",
+    Callback = function()
+        print("button pressed")
+        game:GetService("ReplicatedStorage").IceSkate:FireServer("Freeze")
+    end    
+})
+
+Tab1:AddButton({
+    Name = "Instant lamp",
+    Callback = function()
+        print("button pressed")
+        local Event = game:GetService("ReplicatedStorage").nightmare
+        local equip = debug.getupvalues(require(game.ReplicatedStorage.BACKEND.Lib.Network).fireServer)[3]("SelectGlove")
+        equip:FireServer("ZZZZZZZ")
+        task.wait(0.5)
+        for i = 35, 120 do
+            Event:FireServer("LightBroken")
+            task.wait(0.05)
+        end
+    end    
+})
+
+Tab1:AddButton({
+    Name = "Auto 250 and Disarm (bubble) uses kill helper!",
+    Callback = function()
+        print("button pressed")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Thiago3246/KillstreakHelper/main/Source.luau"))()
+    end    
+})
+
+Tab1:AddButton({
+    Name = "Auto Bob (75k+ slaps)",
+    Callback = function()
+        print("button pressed")
+        local equip = debug.getupvalues(require(game.ReplicatedStorage.BACKEND.Lib.Network).fireServer)[3]("SelectGlove")
+        equip:FireServer("God's Hand")
+        task.wait(0.5)
+        game.ReplicatedStorage.TimestopJump:FireServer()
+        game.ReplicatedStorage.Timestopchoir:FireServer()
+        game.ReplicatedStorage.Timestop:FireServer()
+        task.wait(0.1)
+        equip:FireServer("Replica")
+        task.wait(0.5)
+        local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+        hrp.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
+        task.wait(2)
+        local DuplicateEvent = game:GetService("ReplicatedStorage").Duplicate
+        for i = 1, 150000 do
+            DuplicateEvent:FireServer(true)
+            if i % 100 == 0 then
+                task.wait()
             end
-        end    
-    })
+        end
+        task.wait(1)
+        hop()
+    end    
+})
 
-    Tab1:AddButton({
-        Name = "Auto 250 and Disarm (bubble) uses kill helper!",
-        Callback = function()
-            print("button pressed")
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Thiago3246/KillstreakHelper/main/Source.luau"))()
-        end    
-    })
+-- ================= Slap Farmers =================
+local Tab3 = Window:MakeTab({
+    Name = "Slap Farmers",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
 
-    -- auto bob itself lol
-    Tab1:AddButton({
-        Name = "Auto Bob (75k+ slaps)",
-        Callback = function()
-            print("button pressed")
-            local equip = debug.getupvalues(require(game.ReplicatedStorage.BACKEND.Lib.Network).fireServer)[3]("SelectGlove")
-            equip:FireServer("God's Hand")
+Tab3:AddButton({
+    Name = "Nexer slap farm v2 (OP!)",
+    Callback = function()
+        print("button pressed")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/NewNexer/NexerHub/refs/heads/main/SB/SFs/SFComponents%3D2.0EGRR.luau"))()
+    end    
+})
 
-            task.wait(0.5)
+Tab3:AddButton({
+    Name = "St1mlx mastery helper (key)",
+    Callback = function()
+        print("button pressed")
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/st1mlx/bebebe/refs/heads/main/SBHub'))()
+    end    
+})
 
-            game.ReplicatedStorage.TimestopJump:FireServer()
-            game.ReplicatedStorage.Timestopchoir:FireServer()
-            game.ReplicatedStorage.Timestop:FireServer()
+-- ================= Credits =================
+local Tab4 = Window:MakeTab({
+    Name = "Credits",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
 
-            task.wait(0.1)
+Tab4:AddParagraph("Creators", "silentabsolutedayn")
+Tab4:AddParagraph("2nd creator", "nerna coder-zemboxosx")
+Tab4:AddParagraph("3rd creator", "deltarune_tomorrow")
+Tab4:AddParagraph("Thanks to..", "Nexer open sourced scripts and kindness!")
 
-            equip:FireServer("Replica")
+-- ================= Funny =================
+local Tab5 = Window:MakeTab({
+    Name = "Funny",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
 
-            task.wait(0.5)
+Tab5:AddButton({
+    Name = "Click this if you support spliot! Don't if you don't know who it is",
+    Callback = function()
+        print("button pressed")
+        game.Players.LocalPlayer:Kick("if u support spliot then go fucking kill yourself")
+    end    
+})
+-- ================= Tab 5 =================
+local Tab5 = Window:MakeTab({
+    Name = "Useful",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
 
-            local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-            hrp.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
+Tab5:AddButton({
+    Name = "Hide your username",
+    Callback = function()
+        print("button pressed")
+        local Players = game:GetService("Players")
+        local RunService = game:GetService("RunService")
+        local LocalPlayer = Players.LocalPlayer
 
-            task.wait(2)
-
-            local DuplicateEvent = game:GetService("ReplicatedStorage").Duplicate
-            for i = 1, 150000 do
-                DuplicateEvent:FireServer(true)
-                if i % 100 == 0 then
-                    task.wait()
+        local function sanitizeCharacter(character)
+            if not character then return end
+            local humanoid = character:WaitForChild("Humanoid", 5)
+            if humanoid then
+                humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+                humanoid.DisplayName = ""
+            end
+            local head = character:WaitForChild("Head", 5)
+            if not head then return end
+            for _, child in pairs(head:GetChildren()) do
+                if child:IsA("BillboardGui") then
+                    child.Enabled = false
                 end
             end
-
-            task.wait(1)
-            hop()
-        end    
-    })
-
-    -- ================= Slap Farmers =================
-    local Tab3 = Window:MakeTab({
-        Name = "Slap Farmers",
-        Icon = "rbxassetid://4483345998",
-        PremiumOnly = false
-    })
-
-    Tab3:AddButton({
-        Name = "Nexer slap farm v2 (OP!)",
-        Callback = function()
-            print("button pressed")
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/NewNexer/NexerHub/refs/heads/main/SB/SFs/SFComponents%3D2.0EGRR.luau"))()
-        end    
-    })
-
-    Tab3:AddButton({
-        Name = "St1mlx mastery helper (key)",
-        Callback = function()
-            print("button pressed")
-            loadstring(game:HttpGet('https://raw.githubusercontent.com/st1mlx/bebebe/refs/heads/main/SBHub'))()
-        end    
-    })
-
-    -- ================= Credits =================
-    local Tab4 = Window:MakeTab({
-        Name = "Credits",
-        Icon = "rbxassetid://4483345998",
-        PremiumOnly = false
-    })
-
-    Tab4:AddParagraph("Creators","silentabsolutedayn")
-    Tab4:AddParagraph("2nd creator","nerna coder-zemboxosx")
-    Tab4:AddParagraph("3rd creator","deltarune_tomorrow")
-    Tab4:AddParagraph("Thanks to..","Nexer open sourced scripts and kindness!")
-
-    -- ================= Funny =================
-    local Tab5 = Window:MakeTab({
-        Name = "Funny",
-        Icon = "rbxassetid://4483345998",
-        PremiumOnly = false
-    })
-
-    Tab5:AddButton({
-        Name = "Click this if you support spliot! Don't if you don't know who it is",
-        Callback = function()
-            print("button pressed")
-            game.Players.LocalPlayer:Kick("if u support spliot then go fucking kill yourself")
-        end    
-    })
-
-    Tab5:AddButton({
-        Name = "Hide your username",
-        Callback = function()
-            print("button pressed")
-            local Players = game:GetService("Players")
-            local RunService = game:GetService("RunService")
-            local LocalPlayer = Players.LocalPlayer
-
-            local function sanitizeCharacter(character)
-                if not character then return end
-
-                local humanoid = character:WaitForChild("Humanoid", 5)
-                if humanoid then
-                    humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
-                    humanoid.DisplayName = ""
-                end
-
-                local head = character:WaitForChild("Head", 5)
-                if not head then return end
-
-                for _, child in pairs(head:GetChildren()) do
-                    if child:IsA("BillboardGui") then
-                        child.Enabled = false
-                    end
-                end
-
-                head.ChildAdded:Connect(function(child)
-                    if child:IsA("BillboardGui") then
-                        child.Enabled = false
-                        for _, desc in pairs(child:GetDescendants()) do
-                            if desc:IsA("TextLabel") and string.find(string.lower(desc.Text), string.lower(LocalPlayer.Name)) then
-                                desc.Visible = false
-                            end
-                        end
-                    end
-                end)
-            end
-
-            if LocalPlayer.Character then
-                sanitizeCharacter(LocalPlayer.Character)
-            end
-
-            LocalPlayer.CharacterAdded:Connect(function(character)
-                sanitizeCharacter(character)
-            end)
-
-            RunService.RenderStepped:Connect(function()
-                local char = LocalPlayer.Character
-                if char and char:FindFirstChild("Head") then
-                    for _, gui in pairs(char.Head:GetChildren()) do
-                        if gui:IsA("BillboardGui") and gui.Enabled then
-                            gui.Enabled = false
+            head.ChildAdded:Connect(function(child)
+                if child:IsA("BillboardGui") then
+                    child.Enabled = false
+                    for _, desc in pairs(child:GetDescendants()) do
+                        if desc:IsA("TextLabel") and string.find(string.lower(desc.Text), string.lower(LocalPlayer.Name)) then
+                            desc.Visible = false
                         end
                     end
                 end
             end)
-        end    
-    })
+        end
+
+        if LocalPlayer.Character then
+            sanitizeCharacter(LocalPlayer.Character)
+        end
+        LocalPlayer.CharacterAdded:Connect(function(character)
+            sanitizeCharacter(character)
+        end)
+        RunService.RenderStepped:Connect(function()
+            local char = LocalPlayer.Character
+            if char and char:FindFirstChild("Head") then
+                for _, gui in pairs(char.Head:GetChildren()) do
+                    if gui:IsA("BillboardGui") and gui.Enabled then
+                        gui.Enabled = false
+                    end
+                end
+            end
+        end)
+    end    
+})
 
 Tab5:AddButton({
     Name = "Teleport GUI",
@@ -361,7 +349,6 @@ Tab5:AddButton({
                 dragging = true
                 dragStart = input.Position
                 startPos = Frame.Position
-                
                 input.Changed:Connect(function()
                     if input.UserInputState == Enum.UserInputState.End then
                         dragging = false
@@ -399,17 +386,12 @@ Tab5:AddButton({
             Button.Font = Enum.Font.SourceSans
             Button.TextSize = 14
             Button.BorderSizePixel = 0
-            
             Button.MouseButton1Click:Connect(function()
                 teleport(loc.cframe)
             end)
         end
     end   
 })
---[[
-Name = <string> - The name of the button.
-Callback = <function> - Function executed when the button is pressed.
-]]
 
 Tab1:AddButton({
     Name = "Instnat firework. Player 1 (helper)",
@@ -420,10 +402,6 @@ Tab1:AddButton({
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
     end    
 })
---[[
-Name = <string> - The name of the button.
-Callback = <function> - Function executed when the button is pressed.
-]]
 
 Tab1:AddButton({
     Name = "Instant Firework. Player 2 (main acc)",
@@ -431,16 +409,13 @@ Tab1:AddButton({
         print("button pressed")
         local player = game.Players.LocalPlayer
         local hrp = player.Character:WaitForChild("HumanoidRootPart")
-
         hrp.CFrame = CFrame.new(-1210.05, 328.22, 2.48, 0.748, -0.000, 0.664, -0.000, 1.000, 0.000, -0.664, -0.000, 0.748)
         task.wait(0.3)
-
         game:GetService("ReplicatedStorage").Firework:InvokeServer()
         game:GetService("ReplicatedStorage").AlchemistEvent:FireServer("AddItem", "Cake Mix")
         task.wait(0.1)
         game:GetService("ReplicatedStorage").AlchemistEvent:FireServer("EquipItem", "Cake Mix")
         task.wait(0.5)
-
         local ovenModel = workspace:FindFirstChild("Cube", true)
         if ovenModel then
             if ovenModel:IsA("Model") and ovenModel.PrimaryPart then
@@ -453,10 +428,31 @@ Tab1:AddButton({
         end
     end    
 })
---[[
-Name = <string> - The name of the button.
-Callback = <function> - Function executed when the button is pressed.
-]]
+
+Tab1:AddButton({
+    Name = "Auto get plate (with auto executed noclip)",
+    Callback = function()
+        print("button pressed")
+        local lp = game:GetService("Players").LocalPlayer
+        local rs = game:GetService("RunService")
+        local function target(v)
+            if v:IsA("BasePart") and v.Color == Color3.fromRGB(255, 0, 0) then
+                v:Destroy()
+            end
+        end
+        for _, v in workspace:GetDescendants() do target(v) end
+        workspace.DescendantAdded:Connect(target)
+        rs.Stepped:Connect(function()
+            local char = lp.Character
+            if not char then return end
+            for _, v in char:GetDescendants() do
+                if v:IsA("BasePart") then
+                    v.CanCollide = false
+                end
+            end
+        end)
+    end
+})
 
 Tab5:AddButton({
     Name = "Noclip",
@@ -465,7 +461,6 @@ Tab5:AddButton({
         local player = game.Players.LocalPlayer
         local runService = game:GetService("RunService")
         local character = player.Character or player.CharacterAdded:Wait()
-
         local noclipConnection
         noclipConnection = runService.Stepped:Connect(function()
             if character and character:Parent() then
@@ -478,46 +473,108 @@ Tab5:AddButton({
                 noclipConnection:Disconnect()
             end
         end)
-
         player.CharacterAdded:Connect(function(newChar)
             character = newChar
         end)
     end    
 })
---[[
-Name = <string> - The name of the button.
-Callback = <function> - Function executed when the button is pressed.
-]]
+
+Tab:AddButton({
+    Name = "Eggler for shellbert (1)",
+    Callback = function()
+        game:GetService("TeleportService"):Teleport(129665246576996)
+    end
+})
+
+-- Epilson Lorem Ipsum (Click Detector)
+Tab1:AddButton({
+    Name = "Eggler for shellbert (2)",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local badgeQuestProgress = game:GetService("ReplicatedStorage").PlayerData[player.Name].BadgeQuestProgress
+        local questData = badgeQuestProgress.Value
+        
+        -- Parse the JSON data
+        local success, data = pcall(function()
+            return game:GetService("HttpService"):JSONDecode(questData)
+        end)
+        
+        if not success then
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "Failed to parse quest data",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+            return
+        end
+        
+        -- Get the Easter Hunter quest data
+        local easterQuest = data["_questChainEasterHunter"]
+        
+        if easterQuest then
+            local completed = easterQuest.completed
+            local rewarded = easterQuest.rewarded
+            local collectedEggs = easterQuest.counters.collectedEggs or 0
+            
+            -- Check conditions
+            if completed == false and rewarded == false then
+                if collectedEggs < 10 then
+                    local eggsNeeded = 10 - collectedEggs
+                    local eggText = eggsNeeded == 1 and "Egg" or "Eggs"
+                    local ownedText = collectedEggs == 1 and "Egg" or "Eggs"
+                    
+                    OrionLib:MakeNotification({
+                        Name = "Easter Egg Hunter",
+                        Content = string.format("Finish Easter Egg Hunter Quest First (And Collect %d %s In Total [Owned: %d %s])", 
+                            eggsNeeded, eggText, collectedEggs, ownedText),
+                        Image = "rbxassetid://4483345998",
+                        Time = 5
+                    })
+                    
+                elseif collectedEggs == 10 then
+                    -- All eggs collected but quest not completed? Fire click detector
+                    fireclickdetector(workspace.EggTeleport.ClickDetector)
+                end
+                
+            elseif completed == true and rewarded == false then
+                OrionLib:MakeNotification({
+                    Name = "Easter Egg Hunter",
+                    Content = "Claim Reward From Easter Egg Hunter Quest First",
+                    Image = "rbxassetid://4483345998",
+                    Time = 5
+                })
+                
+            elseif completed == false and rewarded == true then
+                OrionLib:MakeNotification({
+                    Name = "Easter Egg Hunter",
+                    Content = "You Got Bug On Your Quest Please Rejoin",
+                    Image = "rbxassetid://4483345998",
+                    Time = 5
+                })
+                
+            elseif completed == true and rewarded == true and collectedEggs == 10 then
+                -- Quest complete and reward claimed, fire click detector
+                fireclickdetector(workspace.EggTeleport.ClickDetector)
+            end
+        else
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "Easter Hunter quest not found in data",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+        end
+    end
+})
 
 Tab1:AddButton({
-
-Name = "Auto get plate (with auto executed noclip)",
-Callback = function()
-print("button pressed")
-local lp = game:GetService("Players").LocalPlayer
-local rs = game:GetService("RunService")
-local function target(v)
-if v:IsA("BasePart") and v.Color == Color3.fromRGB(255, 0, 0) then
-v:Destroy()
-end
-end
-for _, v in workspace:GetDescendants() do target(v) end
-workspace.DescendantAdded:Connect(target)
-rs.Stepped:Connect(function()
-local char = lp.Character
-if not char then return end
-for _, v in char:GetDescendants() do
-if v:IsA("BasePart") then
-v.CanCollide = false
-end
-end
-end)
-end
+    Name = "Claim Shellbert Reward Glove (Instantly)",
+    Callback = function()
+game:GetService("ReplicatedStorage").Remotes.GloveReward.Replicate:FireServer()
+task.wait(0.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.RewardGlove.RewardGlove.CFrame
+    end
 })
---[[
-Name = - The name of the button.
-Callback = - Function executed when the button is pressed.
-]]
-OrionLib:Init()
 
-end
+OrionLib:Init()
