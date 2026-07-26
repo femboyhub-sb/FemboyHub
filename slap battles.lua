@@ -578,4 +578,31 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.RewardGlo
     end
 })
 
+Tab1:AddButton({
+    Name = "Insta Lotus (disable verify teleports!)",
+    Callback = function()
+        print("button pressed")
+    -- if you're using delta, turn off your anti teleport first!
+loadstring(game:HttpGet('https://pastefy.app/Ds8bqkE9/raw'))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
+Tab1:AddButton({
+    Name = "Auto get doorkeeper (disable verify teleports!)",
+    Callback = function()
+        print("button pressed")
+loadstring(game:HttpGet('https://pastefy.app/zbj5RgPl/raw'))()
+    end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - Function executed when the button is pressed.
+]]
+
 OrionLib:Init()
