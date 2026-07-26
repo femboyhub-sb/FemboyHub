@@ -480,7 +480,7 @@ Tab5:AddButton({
     end    
 })
 
-Tab:AddButton({
+Tab1:AddButton({
     Name = "Eggler for shellbert (1)",
     Callback = function()
         game:GetService("TeleportService"):Teleport(129665246576996)
