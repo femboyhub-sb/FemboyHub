@@ -532,5 +532,3 @@ Callback = - Function executed when the button is pressed.
 ]]
 OrionLib:Init()
     
-OrionLib:Init()
-    
