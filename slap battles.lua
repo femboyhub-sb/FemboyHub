@@ -789,7 +789,7 @@ else
     Tab4:CreateParagraph({Title = "Thanks to..", Content = "Nexer open sourced scripts and kindness!"})
     Tab4:CreateParagraph({Title = "Thanks to..", Content = "Scripter for shellbert fix, huge appreciation!"})
 
-    Tab4:CreateButton({
+    Tab5:CreateButton({
         Name = "Brick fling assistant",
         Callback = function()
             local CoreGui = game:GetService("CoreGui")
@@ -1440,3 +1440,4 @@ end
 
                 local rootPart = character:WaitForChild("HumanoidRootPart", 5)
    
+local Paragraph = Tab3:CreateParagraph({Title = "Thanks to...", Content = "dojyaan_9 for abusers!"})
